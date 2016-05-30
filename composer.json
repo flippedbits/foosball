@@ -1,0 +1,7 @@
+{
+    "require": {
+        "nikic/fast-route": "^1.0",
+        "twig/twig": "^1.24",
+        "cboden/ratchet": "^0.3.5"
+    }
+}

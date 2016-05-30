@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Score Board</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/pure-min.css" />
+        <link rel="stylesheet" href="css/scoreboard.css" />
+    </head>
+    <body id="scoreboard">
+        <div class="frame positions">
+            <div class="pure-g">
+                <div class="pure-u-1-3 positions-panel positions-home">
+                    <h2>{{ global.sides.home }}</h2>
+                    <button class="player-add" data-side="home">Add Player</button>
+                    <ul class="side-player-list side-player-list-home"></ul>
+                </div>
+                <div class="pure-u-1-3">
+                    <h3>Player List</h3>
+                    <ul class="player-list">
+                        {% for user in users %}
+                            <li data-id="{{ user.id }}" data-name="{{ user.name }}" class="button">{{ user.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="pure-u-1-3 positions-panel positions-visitors">
+                    <h2>{{ global.sides.visitors }}</h2>
+                    <button class="player-add" data-side="visitors">Add Player</button>
+                    <ul class="side-player-list side-player-list-visitors"></ul>
+                </div>
+            </div>
+            <button class="to-scoreboard">Score Board</button>
+        </div>
+        <div class="frame scoreboard">
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <h2>{{ global.sides.home }}</h2>
+                    <div class="score score-home">0</div>
+                </div>
+                <div class="pure-u-1-3">
+
+                </div>
+                <div class="pure-u-1-3">
+                    <h2>{{ global.sides.visitors }}</h2>
+                    <div class="score score-home">0</div>
+                </div>
+            </div>
+            <div class="timer">00:00</div>
+            <button class="pause-play">Start</button>
+        </div>
+        <script src="../js/util.js"></script>
+        <script src="../js/superagent.min.js"></script>
+        <script src="../js/scoreboard.js"></script>
+        <script>
+            new ScoreBoard('scoreboard');
+        </script>
+    </body>
+</html>

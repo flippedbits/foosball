@@ -1,0 +1,109 @@
+
+body {
+    background: url(../image/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+button,
+.button {
+    text-transform: uppercase;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+    border-radius: 2px;
+    border: none;
+}
+
+.frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.players button {
+    display: block;
+    margin: 40px auto;
+    font-size: 4rem;
+    padding: 20px 40px;
+    min-width: 360px;
+    color: #41444a;
+}
+
+.scoreboard,
+.positions {
+    text-align: center;
+    color: white;
+}
+
+.positions ul {
+    padding: 0;
+}
+
+.positions ul li {
+    list-style: none;
+}
+
+.positions-panel h2 {
+    font-size: 3rem;
+}
+
+.positions-panel button {
+    color: #41444a;
+    padding: 10px 15px;
+}
+
+.player-list {
+    max-height: 600px;
+    overflow: auto;
+}
+
+.player-list li {
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.3);
+    color: #41444a;
+    display: block;
+    margin: 10px 0;
+}
+
+.player-list li.used {
+    display: none;
+}
+
+.player-list.selecting li {
+    background: rgba(255,255,255,0.8);
+}
+
+.side-player-list {
+    font-size: 1.5rem;
+    margin-top: 40px;
+}
+
+.side-player-list span {
+    font-weight: bold;
+    color: #AB0000;
+    padding: 10px 20px;
+}
+
+.score {
+    font-size: 16rem;
+}
+
+.timer {
+    font-size: 6rem;
+}
+
+.pause-play,
+.to-scoreboard {
+    font-size: 3rem;
+    padding: 20px 40px;
+    color: #41444a;
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
