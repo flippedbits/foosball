@@ -1,7 +1,8 @@
-var ScoreBoard = function(parentId) {
+var ScoreBoard = function(parentId, endScore) {
     this.board = document.getElementById(parentId);
 
     this.frames = ['positions', 'scoreboard'];
+    this.endScore = endScore;
 
     this.currentFrame = 0;
     this.currentSide = null;
@@ -187,7 +188,17 @@ ScoreBoard.prototype.updateScore = function(score) {
 
     this.dom.scoreHome.innerHTML = score.home;
     this.dom.scoreVisitors.innerHTML = score.visitors;
-}
+
+    if (score.home >= this.endScore || score.visitors >= this.endScore) {
+        this.endGame();
+    }
+};
+
+ScoreBoard.prototype.endGame = function() {
+    this.matchTimer.pause();
+    this.poller.pause();
+    this.dom.pausePlay.style.display = 'none';
+};
 
 ScoreBoard.prototype.polling = function() {
     var polling;
@@ -227,13 +238,11 @@ ScoreBoard.prototype.timer = function() {
     obj.resume = function() {
         timer = setInterval(obj.step, 1000);
         obj.running = true;
-        //poller.resume();
     };
 
     obj.pause = function() {
         clearInterval(timer);
         obj.running = false;
-        //poller.pause();
     };
 
     obj.step = function() {
