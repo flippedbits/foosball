@@ -6,6 +6,10 @@ var ScoreBoard = function(parentId) {
     this.currentFrame = 0;
     this.currentSide = null;
     this.currentTime = 0;
+    this.currentScore = {
+        'home': 0,
+        'vistors': 0
+    };
 
     this.setupDom();
     this.setupEvents();
@@ -29,6 +33,8 @@ ScoreBoard.prototype.setupDom = function() {
     this.dom.toScoreboard      = this.board.querySelector('.to-scoreboard');
     this.dom.pausePlay         = this.board.querySelector('.pause-play');
     this.dom.timer             = this.board.querySelector('.timer');
+    this.dom.scoreHome         = this.board.querySelector('.score-home');
+    this.dom.scoreVisitors     = this.board.querySelector('.score-visitors');
 
     this.dom.frames.positions.style.display = 'block';
 };
@@ -101,7 +107,9 @@ ScoreBoard.prototype.showFramescoreboard = function() {
 
 }
 
-ScoreBoard.prototype.pausePlayTimer = function() {
+ScoreBoard.prototype.pausePlayTimer = function(e) {
+    var ele = e.currentTarget;
+
     if (this.matchId == null) {
         var data = {
             tableName: 'main',
@@ -130,8 +138,12 @@ ScoreBoard.prototype.pausePlayTimer = function() {
 
     if (this.matchTimer.running) {
         this.matchTimer.pause();
+        this.poller.pause();
+        ele.innerHTML = "Start";
     } else {
         this.matchTimer.resume();
+        this.poller.resume();
+        ele.innerHTML = "Pause";
     }
 }
 
@@ -168,6 +180,15 @@ ScoreBoard.prototype.prevFrame = function() {
     this.dom.frames[this.frames[this.currentFrame]].style.display = 'block';
 }
 
+ScoreBoard.prototype.updateScore = function(score) {
+    if (score.home == this.currentScore.home && score.visitors == this.currentScore.visitors) {
+        return;
+    }
+
+    this.dom.scoreHome.innerHTML = score.home;
+    this.dom.scoreVisitors.innerHTML = score.visitors;
+}
+
 ScoreBoard.prototype.polling = function() {
     var polling;
 
@@ -185,8 +206,8 @@ ScoreBoard.prototype.polling = function() {
         superagent
           .get('/check/'+ this.matchId)
           .end(function(err, res) {
-              console.log(res);
-          });
+              this.updateScore(res.body.score);
+          }.bind(this));
     }.bind(this);
 
     return obj;
@@ -204,19 +225,19 @@ ScoreBoard.prototype.timer = function() {
     obj.running = false;
 
     obj.resume = function() {
-        timer = setInterval(obj.step, 100);
+        timer = setInterval(obj.step, 1000);
         obj.running = true;
-        poller.resume();
+        //poller.resume();
     };
 
     obj.pause = function() {
         clearInterval(timer);
         obj.running = false;
-        poller.pause();
+        //poller.pause();
     };
 
     obj.step = function() {
-        var now = Math.max(0, theTime += 250);
+        var now = Math.max(0, theTime += 1000);
         var m   = Math.floor(now / 60000);
             m   = (m < 10 ? "0" : "") + m;
         var s   = Math.floor(now / 1000) % 60;

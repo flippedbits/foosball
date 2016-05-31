@@ -3,7 +3,7 @@
 $r->addRoute('GET', '/', 'scoreboard');
 $r->addRoute('GET', '/check/{matchId}', 'check');
 $r->addRoute('POST', '/start', 'start');
-$r->addRoute('POST', '/events/{type}/{side}', 'event');
+$r->addRoute('POST', '/events/{type}/{side}', 'events');
 
 
 function scoreboard($container, $args)
@@ -23,17 +23,17 @@ function events($container, $args)
 {
     $post = json_decode(file_get_contents('php://input'));
 
-    $tableName = $db->escapeString($post['table']);
-
     $db = $container->get('db');
+
+    $tableName = $db->escapeString($post->table);
     $type = $db->escapeString($args['type']);
     $side = $db->escapeString($args['side']);
 
-    $tableId = $db->querySingle("SELECT id FROM fbtable where name = {$tableName}");
+    $tableId = $db->querySingle("SELECT id FROM fbtable where name = '{$tableName}'");
     $matchId = $db->querySingle("SELECT id FROM match WHERE table_id = {$tableId} ORDER BY id DESC");
 
     if ($type == 'goals') {
-        $db->query("INSERT INTO goal (side, match_id) VALUES ('{$matchId}', '{$playerId}', 'home')");
+        $db->query("INSERT INTO goal (side, match_id) VALUES ('{$side}', '{$matchId}')");
     } else if ($type == 'undo') {
 
     }
@@ -47,10 +47,10 @@ function check($container, $args)
 
     $results = $db->query("SELECT * FROM goal where match_id = {$matchId}");
 
-    $data['goal'] = [];
+    $data['score'] = ['home' => 0, 'visitors' => 0];
 
     while ($row = $results->fetchArray()) {
-        $data['goal'][] = $row;
+        $data['score'][$row['side']]++;
     }
 
     jsonResponse($data);
